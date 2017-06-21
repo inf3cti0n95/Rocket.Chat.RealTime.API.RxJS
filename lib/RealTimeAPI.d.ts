@@ -47,4 +47,20 @@ export declare class RealTimeAPI {
      * keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
      */
     keepAlive(): void;
+    /**
+     * Login with Username and Password
+     */
+    login(username: string, password: string): Observable<any>;
+    /**
+     * Login with Authentication Token
+     */
+    loginWithAuthToken(authToken: string): Observable<any>;
+    /**
+     * Login with OAuth, with Client Token and Client Secret
+     */
+    loginWithOAuth(credToken: string, credSecret: string): Observable<any>;
+    /**
+     * getLoginObservable
+     */
+    getLoginObservable(id: string): Observable<any>;
 }
