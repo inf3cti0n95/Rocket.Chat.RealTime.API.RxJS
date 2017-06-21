@@ -4,6 +4,8 @@
 
 import { Observable } from "rxjs";
 import { WebSocketSubject } from 'rxjs/observable/dom/WebSocketSubject';
+import { v1 as uuid } from "uuid";
+import { SHA256 } from "crypto-js";
 
 export class RealTimeAPI {
     public url: string;
@@ -96,5 +98,81 @@ export class RealTimeAPI {
         this.getObservableFilteredByMessageType("ping").subscribe(
             message => this.sendMessage({ msg: "pong" })
         );
+    }
+
+    /**
+     * Login with Username and Password
+     */
+    public login(username: string, password: string) {
+        let id = uuid();
+        this.sendMessage({
+            "msg": "method",
+            "method": "login",
+            "id": id,
+            "params": [
+                {
+                    "user": { "username": username },
+                    "password": {
+                        "digest": SHA256(password).toString(),
+                        "algorithm": "sha-256"
+                    }
+                }
+            ]
+        });
+        return this.getLoginObservable(id);
+    }
+
+    /**
+     * Login with Authentication Token
+     */
+    public loginWithAuthToken(authToken: string) {
+        let id = uuid();
+        this.sendMessage({
+            "msg": "method",
+            "method": "login",
+            "id": id,
+            "params": [
+                { "resume": authToken }
+            ]
+        });
+        return this.getLoginObservable(id);
+    }
+
+    /**
+     * Login with OAuth, with Client Token and Client Secret
+     */
+    public loginWithOAuth(credToken: string, credSecret: string) {
+        let id = uuid();
+        this.sendMessage({
+            "msg": "method",
+            "method": "login",
+            "id": id,
+            "params": [
+                {
+                    "oauth": {
+                        "credentialToken": credToken,
+                        "credentialSecret": credSecret
+                    }
+                }
+            ]
+        });
+        return this.getLoginObservable(id);
+    }
+
+    /**
+     * getLoginObservable
+     */
+    public getLoginObservable(id: string) {
+        let resultObservable = this.getObservableFilteredByID(id);
+        let resultId: string;
+        resultObservable.subscribe(
+            (message: any) => {
+                if ((message.id === id && message.msg === "result" && !message.error))
+                    resultId = message.result.id;
+            }
+        );
+
+        let addedObservable = this.getObservable().buffer(resultObservable).find(obj => obj.find(msg => msg.id === resultId && resultId !== undefined) !== undefined).map(obj => obj[0]);
+        return Observable.merge(resultObservable, addedObservable);
     }
 }
