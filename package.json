@@ -1,0 +1,36 @@
+{
+  "name": "rocket.chat.realtime.api.abstraction",
+  "version": "0.0.1",
+  "description": "Abstraction for Utilizing Rocket.Chat's Realtime API Methods with RxJS",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.Abstraction.git"
+  },
+  "author": "Viraj Trivedi <inf3cti0n95@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "rxjs": "^5.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^2.3.4"
+  },
+  "bugs": {
+    "url": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.Abstraction/issues"
+  },
+  "homepage": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.Abstraction#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Rocket.Chat",
+    "RealTime API",
+    "RxJS",
+    "Observable",
+    "Abstraction"
+  ],
+  "directories": {
+    "lib": "lib"
+  }
+}
