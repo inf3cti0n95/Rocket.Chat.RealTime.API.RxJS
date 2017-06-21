@@ -63,4 +63,8 @@ export declare class RealTimeAPI {
      * getLoginObservable
      */
     getLoginObservable(id: string): Observable<any>;
+    /**
+     * Get Observalble to the Result of Method Call from Rocket.Chat Realtime API
+     */
+    callMethod(method: string, ...params: Array<{}>): Observable<any>;
 }

@@ -175,4 +175,18 @@ export class RealTimeAPI {
         let addedObservable = this.getObservable().buffer(resultObservable).find(obj => obj.find(msg => msg.id === resultId && resultId !== undefined) !== undefined).map(obj => obj[0]);
         return Observable.merge(resultObservable, addedObservable);
     }
+
+    /**
+     * Get Observalble to the Result of Method Call from Rocket.Chat Realtime API
+     */
+    public callMethod(method: string, ...params: Array<{}>) {
+        let id = uuid();
+        this.sendMessage({
+            "msg": "method",
+            method,
+            id,
+            params
+        });
+        return this.getObservableFilteredByID(id);
+    }
 }
