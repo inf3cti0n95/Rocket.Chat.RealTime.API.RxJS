@@ -15,10 +15,6 @@ import { RealTimeAPI } from "rocket.chat.realtime.api.rxjs";
 const realTimeAPI =  new RealTimeAPI("wss://demo.rocket.chat/websocket");
 // Provide, URL to the Rocket.Chat's Realtime API.
 
-
-realTimeAPI.connectToServer(); 
-// Connects to the RealTime API
-
 realTimeAPI.keepAlive(); 
 // Responds "pong" to the "ping" message sent by the Realtime API. To keep the connection alive.
 
@@ -33,7 +29,7 @@ realTimeAPI.keepAlive();
 
 | Methods                                                    	| Functionality                                                                                 	|
 |------------------------------------------------------------	|-----------------------------------------------------------------------------------------------	|
-| connectToServer()                                          	| Connects to the RealTime API.                                                                 	|
+| connectToServer()                                          	| Initiates Connections to the Server to the RealTime API. Returns Observable with the server's response                                                                 	|
 | keepAlive()                                                	| Responds "pong" to the "ping" message sent by the Realtime API. To keep the connection alive. 	|
 | login(username, password)                                  	| Returns Observable to the Result/Response from the RealTime API.                              	|
 | loginWithAuthToken(authToken)                              	| Returns Observable to the Result/Response from the RealTime API.                              	|
