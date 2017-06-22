@@ -1,6 +1,6 @@
 {
   "name": "rocket.chat.realtime.api.rxjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Abstraction for Utilizing Rocket.Chat's Realtime API Methods with RxJS",
   "main": "lib/index.js",
   "directories": {
