@@ -44,4 +44,4 @@ realTimeAPI.keepAlive();
 |                                                            	|                                                                                               	|
 
 
-### Checkout the Rocket.Chat's [RealTime API documentation](https://rocket.chat/docs/developer-guides/realtime-api) for furter information on working of the RealTime API.
+### Checkout the Rocket.Chat's [RealTime API documentation](https://rocket.chat/docs/developer-guides/realtime-api) for further information on working of the RealTime API.
