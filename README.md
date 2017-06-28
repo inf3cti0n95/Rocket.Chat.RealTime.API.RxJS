@@ -18,6 +18,15 @@ const realTimeAPI =  new RealTimeAPI("wss://demo.rocket.chat/websocket");
 realTimeAPI.keepAlive(); 
 // Responds "pong" to the "ping" message sent by the Realtime API. To keep the connection alive.
 
+const auth = realTimeApi.login(USERNAME, PASSWORD);
+// Creating Observable
+
+//Now subscribing the observable
+
+    auth.subscribe(
+    (data) => console.log(data),
+    (err) => console.log(err),
+    () => console.log('completed'));
 ...
 ...
 
