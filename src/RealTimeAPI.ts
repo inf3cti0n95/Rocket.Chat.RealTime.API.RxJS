@@ -189,4 +189,28 @@ export class RealTimeAPI {
         });
         return this.getObservableFilteredByID(id);
     }
+
+    /**
+     * getSubscription
+     */
+    public getSubscription(streamName: string, streamParam: string, addEvent: boolean) {
+        let id = uuid();
+        let subscription = this.webSocket.multiplex(
+            () => JSON.stringify({
+                "msg": "sub",
+                "id": id,
+                "name": streamName,
+                "params": [
+                    streamParam,
+                    addEvent
+                ]
+            }),
+            () => JSON.stringify({
+                "msg": "unsub",
+                "id": id
+            }),
+            (message: any) => typeof message.collection === "string" && message.collection === streamName && message.fields.eventName === streamParam // Proper Filtering to be done. This is temporary filter just for the stream-room-messages subscription
+        );
+        return subscription;
+    }
 }
