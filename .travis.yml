@@ -2,8 +2,6 @@ language: node_js
 sudo: required
 node_js:
   - "6"
-before_script:
-  - "npm install -g typescript && npm install && tsc"
 cache:
   directories:
     - "node_modules"
