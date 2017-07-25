@@ -105,13 +105,14 @@ export class RealTimeAPI {
      */
     public login(username: string, password: string) {
         let id = uuid();
+        let usernameType = username.indexOf("@") !== -1 ? "email" : "username";
         this.sendMessage({
             "msg": "method",
             "method": "login",
             "id": id,
             "params": [
                 {
-                    "user": { "username": username },
+                    "user": { [usernameType]: username },
                     "password": {
                         "digest": SHA256(password).toString(),
                         "algorithm": "sha-256"
