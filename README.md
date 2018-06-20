@@ -1,4 +1,7 @@
 # Rocket.Chat.RealTime.API.Abstraction
+
+[![Build Status](https://travis-ci.org/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS.svg?branch=master)](https://travis-ci.org/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS)
+
 Abstraction for Utilizing [Rocket.Chat](https://rocket.chat/)'s [Realtime API](https://rocket.chat/docs/developer-guides/realtime-api) Methods with [RxJS](http://reactivex.io/rxjs/)
 
 ## Installation
