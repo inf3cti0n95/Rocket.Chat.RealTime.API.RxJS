@@ -13,11 +13,15 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^3.1.33",
+    "@types/jest": "^23.1.1",
     "@types/uuid": "^3.0.0",
+    "jest": "^23.1.0",
+    "mock-socket": "^7.1.0",
+    "ts-jest": "^22.4.6",
     "typescript": "^2.3.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --env=jsdom"
   },
   "repository": {
     "type": "git",
@@ -35,5 +39,23 @@
   "bugs": {
     "url": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS/issues"
   },
-  "homepage": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS#readme"
+  "homepage": "https://github.com/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS#readme",
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/__tests__/*.+(ts|tsx|js)"
+    ]
+  }
 }
