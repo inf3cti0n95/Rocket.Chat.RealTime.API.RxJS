@@ -173,7 +173,7 @@ export class RealTimeAPI {
             }
         );
 
-        let addedObservable = this.getObservable().buffer(resultObservable).find(obj => obj.find(msg => msg.id === resultId && resultId !== undefined) !== undefined).map(obj => obj[0]);
+        let addedObservable = this.getObservable().buffer(resultObservable).find(obj => obj.find(msg => msg.id === resultId && resultId !== undefined) !== undefined).map(obj => obj ? obj[0] : {});
         return Observable.merge(resultObservable, addedObservable);
     }
 
