@@ -3,7 +3,7 @@ Abstraction for Utilizing [Rocket.Chat](https://rocket.chat/)'s [Realtime API](h
 
 ## Installation
 ```
-npm install --save rocket.chat.realtime.api.rxjs 
+npm install --save rocket.chat.realtime.api.rxjs
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ import { RealTimeAPI } from "rocket.chat.realtime.api.rxjs";
 const realTimeAPI =  new RealTimeAPI("wss://demo.rocket.chat/websocket");
 // Provide, URL to the Rocket.Chat's Realtime API.
 
-realTimeAPI.keepAlive(); 
+realTimeAPI.keepAlive();
 // Responds "pong" to the "ping" message sent by the Realtime API. To keep the connection alive.
 
 const auth = realTimeApi.login(USERNAME, PASSWORD);
@@ -50,6 +50,7 @@ const auth = realTimeApi.login(USERNAME, PASSWORD);
 | onCompletion(() => console.info("Complete"))             	  | Subscribes to Completion on the Websocket Connection                                          	|
 | subscribe(messageHandler, errorHandler, completionHandler) 	| Subscribes to All three i.e - messages, errors and completion                                          	|
 | getObservable()                                            	| Returns observable of the WebSocket Connection to the RealTime API                            	|
+| disconnect()                                              	| Disconnect the WebSocket Connection between client and RealTime API                            	|
 |                                                            	|                                                                                               	|
 
 

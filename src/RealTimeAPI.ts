@@ -34,6 +34,13 @@ export class RealTimeAPI {
     }
 
     /**
+     * Disconnect the WebSocket Connection between client and RealTime API
+     */
+    public disconnect() {
+        return this.webSocket.unsubscribe();
+    }
+
+    /**
      * onMessage
      */
     public onMessage(messageHandler?: ((value: {}) => void) | undefined): void {
