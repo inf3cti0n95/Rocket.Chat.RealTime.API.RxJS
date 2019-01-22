@@ -173,15 +173,18 @@ export class RealTimeAPI {
     public getLoginObservable(id: string) {
         let resultObservable = this.getObservableFilteredByID(id);
         let resultId: string;
-        resultObservable.subscribe(
-            (message: any) => {
-                if ((message.id === id && message.msg === "result" && !message.error))
-                    resultId = message.result.id;
-            }
-        );
 
-        let addedObservable = this.getObservable().buffer(resultObservable).find(obj => obj.find(msg => msg.id === resultId && resultId !== undefined) !== undefined).map(obj => obj[0]);
-        return Observable.merge(resultObservable, addedObservable);
+        let addedObservable  = this.getObservable()
+            .buffer(
+                resultObservable.map( ({ msg, error, result }) => {
+                    if(msg === "result" && !error )
+                        return resultId = result.id // Setting resultId to get Result from the buffer
+                })
+            )
+            .flatMap( x => x) // Flattening the Buffered Messages
+            .filter(({ id: msgId }) => resultId !== undefined && msgId === resultId ) //Filtering the "added" result message.
+
+        return Observable.merge(resultObservable, addedObservable); //Merging "result" and "added" messages.
     }
 
     /**
