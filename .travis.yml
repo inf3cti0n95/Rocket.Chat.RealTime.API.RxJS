@@ -1,14 +1,21 @@
 language: node_js
-cache:
-  directories:
-    - ~/.npm
-notifications:
-  email: false
+
 node_js:
-  - '9'
-  - '8'
-after_success:
-  - npm run travis-deploy-once "npm run semantic-release"
+  - 10
+  - 8
+
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
+
+jobs:
+  include:
+    - stage: release
+      node_js: lts/*
+      deploy:
+        provider: script
+        skip_cleanup: true
+        before_script:
+          - npm install
+        script:
+          - npm run semantic-release

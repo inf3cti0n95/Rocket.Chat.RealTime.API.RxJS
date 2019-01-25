@@ -19,12 +19,10 @@
     "mock-socket": "^7.1.0",
     "ts-jest": "^22.4.6",
     "typescript": "^2.3.4",
-    "travis-deploy-once": "^5.0.0",
-    "semantic-release": "^15.6.0"
+    "semantic-release": "^15.13.3"
   },
   "scripts": {
     "test": "jest --env=jsdom",
-    "travis-deploy-once": "travis-deploy-once",
     "semantic-release": "semantic-release"
   },
   "repository": {
