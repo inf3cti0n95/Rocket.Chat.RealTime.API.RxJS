@@ -1,6 +1,10 @@
-# Rocket.Chat.RealTime.API.Abstraction
+# Rocket.Chat.RealTime.API.RxJS
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Build Status](https://travis-ci.org/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS.svg?branch=master)](https://travis-ci.org/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS)
+[![npm](https://img.shields.io/npm/v/Rocket.Chat.RealTime.API.RxJS.svg)](https://www.npmjs.com/package/Rocket.Chat.RealTime.API.RxJS)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
 
 Abstraction for Utilizing [Rocket.Chat](https://rocket.chat/)'s [Realtime API](https://rocket.chat/docs/developer-guides/realtime-api) Methods with [RxJS](http://reactivex.io/rxjs/)
 
