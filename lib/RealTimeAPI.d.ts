@@ -12,6 +12,10 @@ export declare class RealTimeAPI {
      */
     getObservable(): Observable<any>;
     /**
+     * Disconnect the WebSocket Connection between client and RealTime API
+     */
+    disconnect(): void;
+    /**
      * onMessage
      */
     onMessage(messageHandler?: ((value: {}) => void) | undefined): void;
