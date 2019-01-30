@@ -2,24 +2,21 @@
  * Rocket.Chat RealTime API
  */
 
-import { Observable } from "rxjs";
-import { WebSocketSubject } from "rxjs/observable/dom/WebSocketSubject";
+import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import { filter, buffer, flatMap, merge, map, tap } from "rxjs/operators";
 import { v4 as uuid } from "uuid";
 import { SHA256 } from "crypto-js";
 
 export class RealTimeAPI {
-  public url: string;
-  public webSocket: WebSocketSubject<{}>;
+  public webSocket: WebSocketSubject<any>;
 
-  constructor(param: string | WebSocketSubject<{}>) {
+  constructor(param: string | WebSocketSubject<any>) {
     switch (typeof param) {
       case "string":
-        this.url = param as string;
-        this.webSocket = Observable.webSocket(this.url);
+        this.webSocket = webSocket(param);
         break;
       case "object":
-        this.webSocket = param as WebSocketSubject<{}>;
-        this.url = this.webSocket.url;
+        this.webSocket = param as WebSocketSubject<any>;
         break;
       default:
         throw new Error(
@@ -32,7 +29,7 @@ export class RealTimeAPI {
    * Returns the Observable to the RealTime API Socket
    */
   public getObservable() {
-    return this.webSocket.catch(err => Observable.of(err));
+    return this.webSocket;
   }
 
   /**
@@ -81,16 +78,16 @@ export class RealTimeAPI {
   /**
    * sendMessage to Rocket.Chat Server
    */
-  public sendMessage(messageObject: {}): void {
-    this.webSocket.next(JSON.stringify(messageObject));
+  public sendMessage(messageObject: any): void {
+    this.webSocket.next(messageObject);
   }
 
   /**
    * getObservableFilteredByMessageType
    */
   public getObservableFilteredByMessageType(messageType: string) {
-    return this.getObservable().filter(
-      (message: any) => message.msg === messageType
+    return this.getObservable().pipe(
+      filter((message: any) => message.msg === messageType)
     );
   }
 
@@ -98,7 +95,9 @@ export class RealTimeAPI {
    * getObservableFilteredByID
    */
   public getObservableFilteredByID(id: string) {
-    return this.getObservable().filter((message: any) => message.id === id);
+    return this.getObservable().pipe(
+      filter((message: any) => message.id === id)
+    );
   }
 
   /**
@@ -187,16 +186,20 @@ export class RealTimeAPI {
     let resultObservable = this.getObservableFilteredByID(id);
     let resultId: string;
 
-    let addedObservable = this.getObservable()
-      .buffer(
-        resultObservable.map(({ msg, error, result }) => {
-          if (msg === "result" && !error) return (resultId = result.id); // Setting resultId to get Result from the buffer
-        })
-      )
-      .flatMap(x => x) // Flattening the Buffered Messages
-      .filter(({ id: msgId }) => resultId !== undefined && msgId === resultId); //Filtering the "added" result message.
+    let addedObservable = this.getObservable().pipe(
+      buffer(
+        resultObservable.pipe(
+          map(({ msg, error, result }) => {
+            if (msg === "result" && !error) return (resultId = result.id); // Setting resultId to get Result from the buffer
+          })
+        )
+      ),
+      flatMap(x => x), // Flattening the Buffered Messages
+      filter(({ id: msgId }) => resultId !== undefined && msgId === resultId), //Filtering the "added" result message.
+      merge(resultObservable) //Merging "result" and "added" messages.
+    );
 
-    return Observable.merge(resultObservable, addedObservable); //Merging "result" and "added" messages.
+    return addedObservable;
   }
 
   /**
@@ -223,18 +226,16 @@ export class RealTimeAPI {
   ) {
     let id = uuid();
     let subscription = this.webSocket.multiplex(
-      () =>
-        JSON.stringify({
-          msg: "sub",
-          id: id,
-          name: streamName,
-          params: [streamParam, addEvent]
-        }),
-      () =>
-        JSON.stringify({
-          msg: "unsub",
-          id: id
-        }),
+      () => ({
+        msg: "sub",
+        id: id,
+        name: streamName,
+        params: [streamParam, addEvent]
+      }),
+      () => ({
+        msg: "unsub",
+        id: id
+      }),
       (message: any) =>
         typeof message.collection === "string" &&
         message.collection === streamName &&
