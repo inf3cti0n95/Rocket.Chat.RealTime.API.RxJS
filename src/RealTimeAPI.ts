@@ -113,11 +113,11 @@ export class RealTimeAPI {
   }
 
   /**
-   * keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
+   * Returns an Observable to subscribe to keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
    */
-  public keepAlive(): void {
-    this.getObservableFilteredByMessageType("ping").subscribe(message =>
-      this.sendMessage({ msg: "pong" })
+  public keepAlive() {
+    return this.getObservableFilteredByMessageType("ping").pipe(
+      tap(() => this.sendMessage({ msg: "pong" }))
     );
   }
 

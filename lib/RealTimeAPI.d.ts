@@ -46,9 +46,9 @@ export declare class RealTimeAPI {
      */
     connectToServer(): import("rxjs/internal/Observable").Observable<any>;
     /**
-     * keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
+     * Returns an Observable to subscribe to keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
      */
-    keepAlive(): void;
+    keepAlive(): import("rxjs/internal/Observable").Observable<any>;
     /**
      * Login with Username and Password
      */
