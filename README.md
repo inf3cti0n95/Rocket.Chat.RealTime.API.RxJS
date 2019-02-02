@@ -13,6 +13,12 @@ Abstraction for Utilizing [Rocket.Chat](https://rocket.chat/)'s [Realtime API](h
 npm install --save rocket.chat.realtime.api.rxjs
 ```
 
+For RxJS v5 Version of the Package
+
+```
+npm install --save rocket.chat.realtime.api.rxjs@1.0.0
+```
+
 ## Usage
 
 ```
