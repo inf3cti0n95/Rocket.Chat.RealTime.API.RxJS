@@ -2,7 +2,11 @@
  * Rocket.Chat RealTime API
  */
 
-import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import {
+  webSocket,
+  WebSocketSubject,
+  WebSocketSubjectConfig
+} from "rxjs/webSocket";
 import { filter, buffer, flatMap, merge, map, tap } from "rxjs/operators";
 import { v4 as uuid } from "uuid";
 import { SHA256 } from "crypto-js";
@@ -10,19 +14,8 @@ import { SHA256 } from "crypto-js";
 export class RealTimeAPI {
   public webSocket: WebSocketSubject<any>;
 
-  constructor(param: string | WebSocketSubject<any>) {
-    switch (typeof param) {
-      case "string":
-        this.webSocket = webSocket(param);
-        break;
-      case "object":
-        this.webSocket = param as WebSocketSubject<any>;
-        break;
-      default:
-        throw new Error(
-          `Invalid Parameter to the Constructor, Parameter must be of Type WebSocketSubject or URL but was found of type "${typeof param}"`
-        );
-    }
+  constructor(param: string | WebSocketSubjectConfig<any>) {
+    this.webSocket = webSocket(param);
   }
 
   /**

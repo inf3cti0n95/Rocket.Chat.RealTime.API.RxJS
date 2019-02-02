@@ -1,10 +1,10 @@
 /**
  * Rocket.Chat RealTime API
  */
-import { WebSocketSubject } from "rxjs/webSocket";
+import { WebSocketSubject, WebSocketSubjectConfig } from "rxjs/webSocket";
 export declare class RealTimeAPI {
     webSocket: WebSocketSubject<any>;
-    constructor(param: string | WebSocketSubject<any>);
+    constructor(param: string | WebSocketSubjectConfig<any>);
     /**
      * Returns the Observable to the RealTime API Socket
      */
