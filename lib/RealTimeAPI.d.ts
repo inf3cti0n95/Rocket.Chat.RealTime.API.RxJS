@@ -1,16 +1,14 @@
 /**
  * Rocket.Chat RealTime API
  */
-import { Observable } from "rxjs";
-import { WebSocketSubject } from 'rxjs/observable/dom/WebSocketSubject';
+import { WebSocketSubject } from "rxjs/webSocket";
 export declare class RealTimeAPI {
-    url: string;
-    webSocket: WebSocketSubject<{}>;
-    constructor(param: string | WebSocketSubject<{}>);
+    webSocket: WebSocketSubject<any>;
+    constructor(param: string | WebSocketSubject<any>);
     /**
      * Returns the Observable to the RealTime API Socket
      */
-    getObservable(): Observable<any>;
+    getObservable(): WebSocketSubject<any>;
     /**
      * Disconnect the WebSocket Connection between client and RealTime API
      */
@@ -34,45 +32,45 @@ export declare class RealTimeAPI {
     /**
      * sendMessage to Rocket.Chat Server
      */
-    sendMessage(messageObject: {}): void;
+    sendMessage(messageObject: any): void;
     /**
      * getObservableFilteredByMessageType
      */
-    getObservableFilteredByMessageType(messageType: string): Observable<any>;
+    getObservableFilteredByMessageType(messageType: string): import("rxjs/internal/Observable").Observable<any>;
     /**
      * getObservableFilteredByID
      */
-    getObservableFilteredByID(id: string): Observable<any>;
+    getObservableFilteredByID(id: string): import("rxjs/internal/Observable").Observable<any>;
     /**
      * connectToServer
      */
-    connectToServer(): Observable<any>;
+    connectToServer(): import("rxjs/internal/Observable").Observable<any>;
     /**
-     * keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
+     * Returns an Observable to subscribe to keepAlive, Ping and Pong to the Rocket.Chat Server to Keep the Connection Alive.
      */
-    keepAlive(): void;
+    keepAlive(): import("rxjs/internal/Observable").Observable<any>;
     /**
      * Login with Username and Password
      */
-    login(username: string, password: string): Observable<any>;
+    login(username: string, password: string): import("rxjs/internal/Observable").Observable<any>;
     /**
      * Login with Authentication Token
      */
-    loginWithAuthToken(authToken: string): Observable<any>;
+    loginWithAuthToken(authToken: string): import("rxjs/internal/Observable").Observable<any>;
     /**
      * Login with OAuth, with Client Token and Client Secret
      */
-    loginWithOAuth(credToken: string, credSecret: string): Observable<any>;
+    loginWithOAuth(credToken: string, credSecret: string): import("rxjs/internal/Observable").Observable<any>;
     /**
      * getLoginObservable
      */
-    getLoginObservable(id: string): Observable<any>;
+    getLoginObservable(id: string): import("rxjs/internal/Observable").Observable<any>;
     /**
      * Get Observalble to the Result of Method Call from Rocket.Chat Realtime API
      */
-    callMethod(method: string, ...params: Array<{}>): Observable<any>;
+    callMethod(method: string, ...params: Array<{}>): import("rxjs/internal/Observable").Observable<any>;
     /**
      * getSubscription
      */
-    getSubscription(streamName: string, streamParam: string, addEvent: boolean): Observable<any>;
+    getSubscription(streamName: string, streamParam: string, addEvent: boolean): import("rxjs/internal/Observable").Observable<any>;
 }
