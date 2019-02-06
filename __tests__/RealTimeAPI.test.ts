@@ -214,4 +214,53 @@ describe("RealTimeAPI tests", () => {
       });
     });
   });
+
+  it("can call api methods", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+
+    const method = "testMethod";
+    const params = ["example-parameter"];
+
+    realtimeAPI$.callMethod(method, ...params).subscribe();
+
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url.
+
+      socket.on("message", data => {
+        let message = JSON.parse(data);
+
+        expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+
+        expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+        expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
+
+        expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
+        expect(message.method).toEqual(method); // Expecting "method" to be "testMethod" in message.
+
+        expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+
+        expect(message.params).toEqual(params); //Expecting params to be [ "example-parameter" ].
+
+        done();
+      });
+    });
+  });
+
+  it("can disconnect", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+
+    realtimeAPI$.keepAlive().subscribe();
+
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      mockServer.on("close", (socket: WebSocket) => {
+        // Setting up Close Call listener
+        expect(socket.url).toEqual(url); // Expecting websocket url. Connection Closed.
+        done();
+      });
+
+      realtimeAPI$.disconnect(); // Closing the connection.
+    });
+  });
 });
