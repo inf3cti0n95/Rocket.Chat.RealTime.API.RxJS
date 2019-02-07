@@ -1,6 +1,7 @@
 import { WebSocket, Server } from "mock-socket";
 import { RealTimeAPI } from "../src/index";
 import { SHA256 } from "crypto-js";
+import { WebSocketSubject } from "rxjs/webSocket";
 
 describe("RealTimeAPI tests", () => {
   const url = "ws://localhost:8080/";
@@ -261,6 +262,117 @@ describe("RealTimeAPI tests", () => {
       });
 
       realtimeAPI$.disconnect(); // Closing the connection.
+    });
+  });
+
+  it("can get the current webSocket observable", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    expect(realtimeAPI$.getObservable()).toBeInstanceOf(WebSocketSubject);
+    expect(realtimeAPI$.getObservable()).toHaveProperty("_config");
+    expect(realtimeAPI$.getObservable()["_config"]).toHaveProperty("url");
+    expect(realtimeAPI$.getObservable()["_config"].url).toEqual(url);
+    done();
+  });
+
+  it("can filter messages by id", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    const id = "1";
+    const other_id = "2";
+
+    realtimeAPI$.getObservableFilteredByID(id).subscribe(message => {
+      expect(message.id).toEqual(id); // Expecting id to be 1
+      done();
+    });
+
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      socket.send(
+        JSON.stringify({
+          id: other_id // Sending other id, which is expected to be filtered.
+        })
+      );
+
+      socket.send(
+        JSON.stringify({
+          id: id // Sending id, which is expected.
+        })
+      );
+    });
+  });
+
+  it("can filter messages by message type (msg)", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    const type = "type_1";
+    const other_type = "type_2";
+
+    realtimeAPI$.getObservableFilteredByMessageType(type).subscribe(message => {
+      expect(message.msg).toEqual(type); // Expecting id to be type_1
+      done();
+    });
+
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      socket.send(
+        JSON.stringify({
+          msg: other_type // Sending other type, which is expected to be filtered.
+        })
+      );
+
+      socket.send(
+        JSON.stringify({
+          msg: type // Sending type, which is expected.
+        })
+      );
+    });
+  });
+
+  it.skip("can get multiplexed subscription to a channel", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    // realtimeAPI$.getSubscription
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+    });
+  });
+
+  it.skip("can trigger onCompletion method when websocket disconnects", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    // realtimeAPI$.onCompletion
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+    });
+  });
+
+  it.skip("can trigger onMessage method on a new message from server", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    // realtimeAPI$.onMessage
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+    });
+  });
+
+  it.skip("can trigger onError method on an error from server", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    // realtimeAPI$.onError
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+    });
+  });
+
+  it.skip("can subscribe to websocket", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    // realtimeAPI$.subscribe
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+    });
+  });
+
+  it.skip("can send message to server", done => {
+    const realtimeAPI$ = new RealTimeAPI(url);
+    // realtimeAPI$.sendMessage
+    mockServer.on("connection", (socket: WebSocket) => {
+      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
     });
   });
 });
