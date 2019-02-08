@@ -328,11 +328,116 @@ describe("RealTimeAPI tests", () => {
     });
   });
 
-  it.skip("can get multiplexed subscription to a channel", done => {
-    const realtimeAPI$ = new RealTimeAPI(url);
-    // realtimeAPI$.getSubscription
-    mockServer.on("connection", (socket: WebSocket) => {
-      expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+  describe("getSubscription method", () => {
+    it("can send subscription message to a channel", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const streamName = "example-stream-name";
+      const streamParam = "stream-parameter";
+      const addEvent = true;
+
+      realtimeAPI$
+        .getSubscription(streamName, streamParam, addEvent)
+        .subscribe();
+
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+        mockServer.on("message", data => {
+          let message = JSON.parse(data);
+
+          expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+
+          expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+          expect(message.msg).toEqual("sub"); // Expecting "msg" to be "sub" in message.
+
+          expect(message).toHaveProperty("name"); // Expecting to have "method" property in message.
+          expect(message.name).toEqual(streamName); // Expecting "method" to be streamName in message.
+
+          expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+
+          expect(message.params).toEqual(
+            expect.arrayContaining([streamParam, addEvent])
+          ); //Expecting params to be Array [streamParam, addEvent]
+
+          done();
+        });
+      });
+    });
+
+    it("can send unsubscription message to a channel", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const streamName = "example-stream-name";
+      const streamParam = "stream-parameter";
+      const addEvent = true;
+
+      let channelSubscription$ = realtimeAPI$
+        .getSubscription(streamName, streamParam, addEvent)
+        .subscribe();
+
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+        channelSubscription$.unsubscribe();
+
+        let messageId;
+
+        mockServer.on("message", data => {
+          let message = JSON.parse(data);
+
+          if (message.msg === "sub") {
+            messageId = message.id; //Set Message Id On Subscription
+          }
+
+          if (message.msg === "unsub") {
+            expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+            expect(message.id).toEqual(messageId); // Expecting "id" to be messageId from sub message.
+
+            expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+            expect(message.msg).toEqual("unsub"); // Expecting "msg" to be "unsub" in message.
+
+            done();
+          }
+        });
+      });
+    });
+
+    it("can get messages from subscription", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const streamName = "example-stream-name";
+      const streamParam = "stream-parameter";
+      const addEvent = true;
+
+      const streamMessage = {
+        collection: streamName,
+        fields: {
+          eventName: streamParam
+        }
+      };
+
+      const otherStreamMessage = {
+        collection: "other-stream-name",
+        fields: {
+          eventName: streamParam
+        }
+      };
+
+      realtimeAPI$
+        .getSubscription(streamName, streamParam, addEvent)
+        .subscribe(message => {
+          expect(message).toEqual(streamMessage); // Expecting "messages" to be the streamMessage in message.
+          done();
+        });
+
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+        socket.send(
+          JSON.stringify(otherStreamMessage) // Sending other stream message.
+        );
+
+        socket.send(
+          JSON.stringify(streamMessage) // Sending current stream message.
+        );
+      });
     });
   });
 
