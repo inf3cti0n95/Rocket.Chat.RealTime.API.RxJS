@@ -68,150 +68,281 @@ describe("RealTimeAPI tests", () => {
     });
   });
 
-  it("can send login request with username and password", done => {
-    const realtimeAPI$ = new RealTimeAPI(url);
-    const username = "username";
-    const password = "password";
-    realtimeAPI$.login(username, password).subscribe(); // Should send pong to every ping message.
+  describe("login methods", () => {
+    it("can send login request with username and password", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const username = "username";
+      const password = "password";
+      realtimeAPI$.login(username, password).subscribe(); // Should send pong to every ping message.
 
-    mockServer.on("connection", (socket: WebSocket) => {
-      expect(socket.url).toEqual(url); // Expecting websocket url.
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url.
 
-      socket.on("message", data => {
-        let message = JSON.parse(data);
+        socket.on("message", data => {
+          let message = JSON.parse(data);
 
-        expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+          expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
 
-        expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
-        expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
+          expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+          expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
 
-        expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
-        expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
+          expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
+          expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
 
-        expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+          expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
 
-        expect(message.params).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              user: { username },
-              password: {
-                digest: SHA256(password).toString(),
-                algorithm: "sha-256"
-              }
-            })
-          ])
-        ); //Expecting params to be Array of Object { user: {username: "username"}, password: { algorithm: "sha-256", digest: "..."} }
+          expect(message.params).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                user: { username },
+                password: {
+                  digest: SHA256(password).toString(),
+                  algorithm: "sha-256"
+                }
+              })
+            ])
+          ); //Expecting params to be Array of Object { user: {username: "username"}, password: { algorithm: "sha-256", digest: "..."} }
 
-        done();
+          done();
+        });
       });
     });
-  });
 
-  it("can send login request with email and password", done => {
-    const realtimeAPI$ = new RealTimeAPI(url);
-    const email = "username@email.com";
-    const password = "password";
-    realtimeAPI$.login(email, password).subscribe(); // Should send pong to every ping message.
-    mockServer.on("connection", (socket: WebSocket) => {
-      expect(socket.url).toEqual(url); // Expecting websocket url.
+    it("can send login request with email and password", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const email = "username@email.com";
+      const password = "password";
+      realtimeAPI$.login(email, password).subscribe(); // Should send pong to every ping message.
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url.
 
-      socket.on("message", data => {
-        let message = JSON.parse(data);
+        socket.on("message", data => {
+          let message = JSON.parse(data);
 
-        expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+          expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
 
-        expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
-        expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
+          expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+          expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
 
-        expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
-        expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
+          expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
+          expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
 
-        expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+          expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
 
-        expect(message.params).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              user: { email },
-              password: {
-                digest: SHA256(password).toString(),
-                algorithm: "sha-256"
-              }
-            })
-          ])
-        ); //Expecting params to be Array of Object { user: {email: "username@email.com"}, password: { algorithm: "sha-256", digest: "..."} }
+          expect(message.params).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                user: { email },
+                password: {
+                  digest: SHA256(password).toString(),
+                  algorithm: "sha-256"
+                }
+              })
+            ])
+          ); //Expecting params to be Array of Object { user: {email: "username@email.com"}, password: { algorithm: "sha-256", digest: "..."} }
 
-        done();
+          done();
+        });
       });
     });
-  });
 
-  it("can send login request with auth token", done => {
-    const realtimeAPI$ = new RealTimeAPI(url);
-    const token = "token";
-    realtimeAPI$.loginWithAuthToken(token).subscribe(); // Should send pong to every ping message.
-    mockServer.on("connection", (socket: WebSocket) => {
-      expect(socket.url).toEqual(url); // Expecting websocket url.
+    it("can send login request with auth token", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const token = "token";
+      realtimeAPI$.loginWithAuthToken(token).subscribe(); // Should send pong to every ping message.
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url.
 
-      socket.on("message", data => {
-        let message = JSON.parse(data);
+        socket.on("message", data => {
+          let message = JSON.parse(data);
 
-        expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+          expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
 
-        expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
-        expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
+          expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+          expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
 
-        expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
-        expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
+          expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
+          expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
 
-        expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+          expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
 
-        expect(message.params).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              resume: token
-            })
-          ])
-        ); //Expecting params to be Array of Object { resume: "token" }
+          expect(message.params).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                resume: token
+              })
+            ])
+          ); //Expecting params to be Array of Object { resume: "token" }
 
-        done();
+          done();
+        });
       });
     });
-  });
 
-  it("can send login request with oauth tokens", done => {
-    const realtimeAPI$ = new RealTimeAPI(url);
-    const credentialToken = "credentialToken";
-    const credentialSecret = "credentialSecret";
+    it("can send login request with oauth tokens", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const credentialToken = "credentialToken";
+      const credentialSecret = "credentialSecret";
 
-    realtimeAPI$.loginWithOAuth(credentialToken, credentialSecret).subscribe(); // Should send pong to every ping message.
-    mockServer.on("connection", (socket: WebSocket) => {
-      expect(socket.url).toEqual(url); // Expecting websocket url.
+      realtimeAPI$
+        .loginWithOAuth(credentialToken, credentialSecret)
+        .subscribe(); // Should send pong to every ping message.
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url.
 
-      socket.on("message", data => {
-        let message = JSON.parse(data);
+        socket.on("message", data => {
+          let message = JSON.parse(data);
 
-        expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+          expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
 
-        expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
-        expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
+          expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+          expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
 
-        expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
-        expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
+          expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
+          expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
 
-        expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+          expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
 
-        expect(message.params).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              oauth: {
-                credentialToken,
-                credentialSecret
-              }
-            })
-          ])
-        ); //Expecting params to be Array of Object { oauth: {credentialSecret: "credentialSecret", credentialToken: "credentialToken"} }
+          expect(message.params).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                oauth: {
+                  credentialToken,
+                  credentialSecret
+                }
+              })
+            ])
+          ); //Expecting params to be Array of Object { oauth: {credentialSecret: "credentialSecret", credentialToken: "credentialToken"} }
 
-        done();
+          done();
+        });
+      });
+    });
+
+    it("can get response to successful login request", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const username = "username";
+      const password = "password";
+      const addedMessageId = "some-id";
+      let resultId;
+
+      realtimeAPI$.subscribe(); // Should send pong to every ping message.
+
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url.
+
+        socket.on("message", data => {
+          let message = JSON.parse(data);
+
+          expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+
+          expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+          expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
+
+          expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
+          expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
+
+          expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+
+          expect(message.params).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                user: { username },
+                password: {
+                  digest: SHA256(password).toString(),
+                  algorithm: "sha-256"
+                }
+              })
+            ])
+          ); //Expecting params to be Array of Object { user: {username: "username"}, password: { algorithm: "sha-256", digest: "..."} }
+          const addedMessage = { msg: "added", id: addedMessageId };
+          resultId = message.id;
+          const resultMessage = {
+            msg: "result",
+            id: resultId,
+            result: { id: addedMessageId }
+          };
+
+          socket.send(JSON.stringify(addedMessage));
+          socket.send(JSON.stringify(resultMessage));
+        });
+
+        realtimeAPI$.login(username, password).subscribe(message => {
+          expect(message).toHaveProperty("msg");
+          if (message.msg === "added") {
+            expect(message).toHaveProperty("id");
+            expect(message.id).toEqual(addedMessageId);
+          }
+
+          if (message.msg === "result") {
+            expect(message).toHaveProperty("id");
+            expect(message.id).toEqual(resultId);
+            expect(message).toHaveProperty("result");
+            expect(message.result).toHaveProperty("id");
+            expect(message.result.id).toEqual(addedMessageId);
+
+            done();
+          }
+        }); // Should send pong to every ping message.
+      });
+    });
+
+    it("can get response to unsuccessful login request", done => {
+      const realtimeAPI$ = new RealTimeAPI(url);
+      const username = "username";
+      const password = "password";
+      const error = {
+        error: 403,
+        reason: "User not found",
+        message: "User not found [403]",
+        errorType: "UserNotFoundError"
+      };
+      let resultId;
+
+      realtimeAPI$.subscribe(); // Should send pong to every ping message.
+
+      mockServer.on("connection", (socket: WebSocket) => {
+        expect(socket.url).toEqual(url); // Expecting websocket url.
+
+        socket.on("message", data => {
+          let message = JSON.parse(data);
+
+          expect(message).toHaveProperty("id"); // Expecting to have "id" property in message.
+
+          expect(message).toHaveProperty("msg"); // Expecting to have "msg" property in message.
+          expect(message.msg).toEqual("method"); // Expecting "msg" to be "method" in message.
+
+          expect(message).toHaveProperty("method"); // Expecting to have "method" property in message.
+          expect(message.method).toEqual("login"); // Expecting "method" to be "login" in message.
+
+          expect(message).toHaveProperty("params"); // Expecting to have "params" property in message.
+
+          expect(message.params).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                user: { username },
+                password: {
+                  digest: SHA256(password).toString(),
+                  algorithm: "sha-256"
+                }
+              })
+            ])
+          ); //Expecting params to be Array of Object { user: {username: "username"}, password: { algorithm: "sha-256", digest: "..."} }
+          resultId = message.id;
+          const resultMessage = { msg: "result", id: resultId, error: error };
+
+          socket.send(JSON.stringify(resultMessage));
+        });
+
+        realtimeAPI$.login(username, password).subscribe(message => {
+          expect(message).toHaveProperty("msg");
+          expect(message.msg).toEqual("result");
+          expect(message).toHaveProperty("id");
+          expect(message.id).toEqual(resultId);
+          expect(message).toHaveProperty("error");
+          expect(message.error).toEqual(error);
+          done();
+        });
       });
     });
   });
@@ -441,43 +572,89 @@ describe("RealTimeAPI tests", () => {
     });
   });
 
-  it.skip("can trigger onCompletion method when websocket disconnects", done => {
+  it("can trigger onCompletion method when websocket disconnects", done => {
     const realtimeAPI$ = new RealTimeAPI(url);
-    // realtimeAPI$.onCompletion
+    realtimeAPI$.subscribe();
     mockServer.on("connection", (socket: WebSocket) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      realtimeAPI$.onCompletion(() => {
+        done();
+      });
+      realtimeAPI$.disconnect();
     });
   });
 
-  it.skip("can trigger onMessage method on a new message from server", done => {
+  it("can trigger onMessage method on a new message from server", done => {
     const realtimeAPI$ = new RealTimeAPI(url);
-    // realtimeAPI$.onMessage
+    const testMessage = {
+      msg: "test message"
+    };
+    realtimeAPI$.subscribe();
     mockServer.on("connection", (socket: WebSocket) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      realtimeAPI$.onMessage(message => {
+        expect(message).toEqual(testMessage);
+        done();
+      });
+
+      socket.send(JSON.stringify(testMessage));
     });
   });
 
-  it.skip("can trigger onError method on an error from server", done => {
+  it("can trigger onError method on an error from server", done => {
     const realtimeAPI$ = new RealTimeAPI(url);
-    // realtimeAPI$.onError
+
+    realtimeAPI$.onError(error => {
+      expect(error).toBeInstanceOf(Error); //Expecting an Error Instance
+      expect(error.name).toEqual("SyntaxError"); // Expecting a SyntaxError
+      done();
+    });
+
     mockServer.on("connection", (socket: WebSocket) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      socket.send("Hello"); // Sending a String where JSON is expected. A "SyntaxError"
     });
   });
 
-  it.skip("can subscribe to websocket", done => {
+  it("can subscribe to websocket", done => {
     const realtimeAPI$ = new RealTimeAPI(url);
-    // realtimeAPI$.subscribe
+
+    const testMessage = {
+      msg: "test message"
+    };
+
+    realtimeAPI$.subscribe(message => {
+      expect(message).toEqual(testMessage);
+      done();
+    });
+
     mockServer.on("connection", (socket: WebSocket) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      socket.send(JSON.stringify(testMessage));
     });
   });
 
-  it.skip("can send message to server", done => {
+  it("can send message to server", done => {
     const realtimeAPI$ = new RealTimeAPI(url);
-    // realtimeAPI$.sendMessage
+
+    const testMessage = {
+      msg: "test message"
+    };
+
+    realtimeAPI$.subscribe();
+    realtimeAPI$.sendMessage(testMessage);
+
     mockServer.on("connection", (socket: WebSocket) => {
       expect(socket.url).toEqual(url); // Expecting websocket url. Connection Successful.
+
+      socket.on("message", message => {
+        expect(JSON.parse(message)).toEqual(testMessage);
+        done();
+      });
     });
   });
 });
