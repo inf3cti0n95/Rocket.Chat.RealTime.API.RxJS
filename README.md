@@ -2,6 +2,7 @@
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Build Status](https://travis-ci.org/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS.svg?branch=master)](https://travis-ci.org/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS)
+[![codecov](https://codecov.io/gh/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS/branch/master/graph/badge.svg)](https://codecov.io/gh/inf3cti0n95/Rocket.Chat.RealTime.API.RxJS)
 [![npm](https://img.shields.io/npm/v/rocket.chat.realtime.api.rxjs.svg)](https://www.npmjs.com/package/rocket.chat.realtime.api.rxjs)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
