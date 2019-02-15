@@ -16,8 +16,7 @@ jobs:
         provider: script
         skip_cleanup: true
         before_script:
-          - npm install -g codecov
           - npm install
         script:
           - npm run semantic-release
-          - codecov
+          - npm run codecov

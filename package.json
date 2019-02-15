@@ -15,6 +15,7 @@
     "@types/crypto-js": "^3.1.33",
     "@types/jest": "^23.1.1",
     "@types/uuid": "^3.0.0",
+    "codecov": "^3.2.0",
     "eslint": "^5.12.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.6.0",
@@ -35,7 +36,8 @@
   },
   "scripts": {
     "test": "jest --env=jsdom",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "codecov": "codecov"
   },
   "repository": {
     "type": "git",
