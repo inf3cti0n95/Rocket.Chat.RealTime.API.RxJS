@@ -15,9 +15,9 @@ jobs:
       deploy:
         provider: script
         skip_cleanup: true
-        before_script:
-          - npm install
+        install:
           - npm install -g codecov
-        script:
+          - npm install
+        after_success:
           - npm run semantic-release
           - codecov
