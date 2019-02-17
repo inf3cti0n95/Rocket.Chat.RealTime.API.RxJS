@@ -71,7 +71,7 @@
       }
     },
     "testMatch": [
-      "**/__tests__/*.+(ts|tsx|js)"
+      "**/tests/*.+(ts|tsx|js)"
     ],
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
