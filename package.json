@@ -35,7 +35,7 @@
     }
   },
   "scripts": {
-    "test": "jest --env=jsdom",
+    "test": "jest --env=jsdom --notify",
     "semantic-release": "semantic-release",
     "codecov": "codecov"
   },
