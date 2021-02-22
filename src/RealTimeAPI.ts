@@ -198,7 +198,7 @@ export class RealTimeAPI {
   /**
    * Get Observalble to the Result of Method Call from Rocket.Chat Realtime API
    */
-  public callMethod(method: string, ...params: Array<{}>) {
+  public callMethod(method: string, ...params: Array<{} | null>) {
     let id = uuid();
     this.sendMessage({
       msg: "method",
