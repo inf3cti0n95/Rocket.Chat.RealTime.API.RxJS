@@ -72,5 +72,5 @@ export declare class RealTimeAPI {
     /**
      * getSubscription
      */
-    getSubscription(streamName: string, streamParam: string, addEvent: boolean): import("rxjs/internal/Observable").Observable<any>;
+    getSubscription(streamName: string, streamParam: any, addEvent: boolean): import("rxjs/internal/Observable").Observable<any>;
 }
