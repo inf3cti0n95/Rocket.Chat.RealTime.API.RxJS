@@ -25,7 +25,7 @@
     "mock-socket": "^7.1.0",
     "prettier": "^1.16.1",
     "pretty-quick": "^1.10.0",
-    "semantic-release": "^15.13.25",
+    "semantic-release": "^17.2.3",
     "ts-jest": "^22.4.6",
     "typescript": "^2.3.4"
   },
